@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FrameCraft</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/favicon.png') }}">
+</head>
+<body>
+    <!-- Animated Background -->
+    <ul class="bg-animation">
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+    </ul>
+
+    <div class="app-container">
+        <header class="app-header">
+            <div class="logo">
+                <h1 class="gradient-text">FrameCraft</h1>
+            </div>
+            <div class="theme-switch">
+                <label class="toggle-label" for="theme-toggle">
+                    <i class="fas fa-sun"></i>
+                    <i class="fas fa-moon"></i>
+                    <span class="toggle-ball"></span>
+                </label>
+                <input type="checkbox" id="theme-toggle">
+            </div>
+        </header>
+
+        <main class="main-content">
+            <section class="hero-section">
+                <div class="hero-content">
+                    <h2>Convert Videos to PDF</h2>
+                    <p>Capture screenshots from any video at custom intervals or specific timestamps and generate a well-formatted PDF document.</p>
+                    <div class="hero-features">
+                        <div class="hero-feature-item">
+                            <i class="fas fa-photo-film"></i>
+                            <span>Auto Screenshots</span>
+                        </div>
+                        <div class="hero-feature-item">
+                            <i class="fas fa-clock"></i>
+                            <span>Custom Timestamps</span>
+                        </div>
+                        <div class="hero-feature-item">
+                            <i class="fas fa-file-pdf"></i>
+                            <span>Quality PDF Export</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="hero-image float-animation">
+                    <div class="placeholder-image">
+                        <i class="fas fa-file-pdf"></i>
+                        <span>FrameCraft</span>
+                    </div>
+                </div>
+            </section>
+
+            <section class="converter-section">
+                <div class="converter-card">
+                    <h2>Start Converting</h2>
+                    <form id="converter-form">
+                        <div class="form-group">
+                            <label for="youtube-url">Video URL</label>
+                            <div class="input-with-icon">
+                                <i class="fab fa-youtube"></i>
+                                <input type="url" id="youtube-url" name="youtube-url" placeholder="https://www.youtube.com/watch?v=...or any video URL" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Capture Mode</label>
+                            <div class="radio-group">
+                                <div class="radio-option">
+                                    <input type="radio" id="interval-mode" name="capture-mode" value="interval" checked>
+                                    <label for="interval-mode" class="mode-label">
+                                        <i class="fas fa-clock"></i>
+                                        <span>Time Intervals</span>
+                                    </label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" id="custom-mode" name="capture-mode" value="custom">
+                                    <label for="custom-mode" class="mode-label">
+                                        <i class="fas fa-list-ol"></i>
+                                        <span>Custom Timestamps</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="interval-config" class="form-group capture-option-panel">
+                            <label for="interval">Screenshot Every (seconds)</label>
+                            <div class="input-with-icon">
+                                <i class="fas fa-clock"></i>
+                                <input type="number" id="interval" name="interval" min="5" value="60">
+                            </div>
+                            <div class="preset-intervals">
+                                <button type="button" class="interval-preset" data-value="30">30s</button>
+                                <button type="button" class="interval-preset" data-value="60">1m</button>
+                                <button type="button" class="interval-preset" data-value="300">5m</button>
+                                <button type="button" class="interval-preset" data-value="600">10m</button>
+                            </div>
+                        </div>
+
+                        <div id="custom-timestamps" class="form-group capture-option-panel" style="display: none;">
+                            <label>Custom Timestamps</label>
+                            <div id="json-upload-section" class="json-upload-section">
+                                <input type="file" id="timestamps-json" name="timestamps-json" accept=".json">
+                                <label for="timestamps-json" class="file-upload-label">
+                                    <i class="fas fa-file-upload"></i>
+                                    <span>Upload JSON File</span>
+                                </label>
+                                <div id="json-file-name" class="file-name">No file selected</div>
+                            </div>
+                            <div class="info-text">
+                                <i class="fas fa-info-circle"></i>
+                                <span>Upload a JSON file containing your custom timestamps</span>
+                            </div>
+                            <div class="timestamps-preview">
+                                <div class="preview-header">
+                                    <h4>Timestamps Preview</h4>
+                                    <span class="preview-count">0 timestamps</span>
+                                </div>
+                                <div id="timestamps-list" class="timestamps-list">
+                                    <div class="empty-state">
+                                        <i class="fas fa-clock"></i>
+                                        <p>No timestamps loaded yet</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="submit" class="primary-button" id="convert-btn">
+                                <i class="fas fa-play"></i>
+                                Convert to PDF
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+
+            <section class="status-section" style="display: none;">
+                <div class="container">
+                    <div class="status-card">
+                        <div class="status-header">
+                            <div class="status-icon pulse-animation">
+                                <i class="fas fa-spinner fa-spin"></i>
+                            </div>
+                            <h2 class="status-title">Conversion in Progress</h2>
+                        </div>
+                        <div class="status-content">
+                            <p class="status-message">Initializing conversion...</p>
+                            <div class="progress-bar">
+                                <div class="progress-bar-fill" style="width: 0%"></div>
+                            </div>
+                            <p class="progress-text">0%</p>
+                            <div class="status-details-panel">
+                                <h3>Detailed Progress</h3>
+                                <div class="status-details">Preparing to process video...</div>
+                            </div>
+                        </div>
+                        <div class="download-section" style="display: none;">
+                            <h3>Download Your PDF</h3>
+                            <button id="download-btn" class="primary-button">
+                                <i class="fas fa-download"></i> Download PDF
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="features-section">
+                <h2>Key Features</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <h3>Time-Based Capture</h3>
+                        <p>Take screenshots at regular intervals throughout the video or specify exact timestamps.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-film"></i>
+                        </div>
+                        <h3>HD Screenshots</h3>
+                        <p>Capture high-quality screenshots that preserve the original video resolution and aspect ratio.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-file-pdf"></i>
+                        </div>
+                        <h3>PDF Creation</h3>
+                        <p>Generate a well-structured PDF document with appropriate layout and formatting.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-font"></i>
+                        </div>
+                        <h3>Timestamp Overlay</h3>
+                        <p>Each screenshot includes the timestamp, making it easy to reference back to the original video.</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="app-footer">
+            <div class="footer-links">
+                <p>MADE IN GITAM</p>
+            </div>
+        </footer>
+    </div>
+
+    <div class="modal" id="error-modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Error</h3>
+                <span class="modal-close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <p id="error-message"></p>
+            </div>
+            <div class="modal-footer">
+                <button id="close-modal" class="secondary-button">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <script>
+        // Add ripple effect to buttons
+        document.addEventListener('DOMContentLoaded', function() {
+            const buttons = document.querySelectorAll('.primary-button, .secondary-button');
+            
+            buttons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    let x = e.clientX - e.target.getBoundingClientRect().left;
+                    let y = e.clientY - e.target.getBoundingClientRect().top;
+                    
+                    let ripple = document.createElement('span');
+                    ripple.classList.add('ripple');
+                    ripple.style.left = x + 'px';
+                    ripple.style.top = y + 'px';
+                    
+                    this.appendChild(ripple);
+                    
+                    setTimeout(() => {
+                        ripple.remove();
+                    }, 600);
+                });
+            });
+        });
+    </script>
+</body>
+</html>

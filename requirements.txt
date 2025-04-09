@@ -1,0 +1,7 @@
+Flask==3.0.2
+Flask-CORS==4.0.0
+opencv-python==4.9.0.80
+numpy==1.26.4
+yt-dlp==2024.3.10
+fpdf==1.7.2
+Werkzeug==3.0.1
